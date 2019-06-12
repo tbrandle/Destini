@@ -32,34 +32,67 @@ class ViewController: UIViewController {
     // UI Elements linked to the storyboard
     @IBOutlet weak var topButton: UIButton!         // Has TAG = 1
     @IBOutlet weak var bottomButton: UIButton!      // Has TAG = 2
+    
+    @IBOutlet weak var restartBtn: UIButton!
     @IBOutlet weak var storyTextView: UILabel!
     
+    
     // TODO Step 5: Initialise instance variables here
-    
-    
+    var allStories = [Int: String]()
+    var allAnswers = [String: String]()
+    var storyNumber : Int = 1
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        allStories = [1: story1, 2: story2, 3: story3, 4: story4, 5: story5, 6: story6]
+        allAnswers = ["1a": answer1a, "1b": answer1b, "2a": answer2a, "2b": answer2b, "3a": answer3a, "3b": answer3b ]
         
-        
-        // TODO Step 3: Set the text for the storyTextView, topButton, bottomButton, and to T1_Story, T1_Ans1, and T1_Ans2
-        
+        updateStory(story: storyNumber)
     }
+    
+    @IBAction func restartBtn(_ sender: UIButton) {
+        updateStory(story: 1)
+    }
+    
 
     
     // User presses one of the buttons
     @IBAction func buttonPressed(_ sender: UIButton) {
-    
-        // TODO Step 4: Write an IF-Statement to update the views
+
+        switch storyNumber {
+            case 1:
+                sender.tag == 1
+                    ? updateStory(story: 3)
+                    : updateStory(story: 2)
+            case 2:
+                sender.tag == 1
+                    ? updateStory(story: 3)
+                    : updateStory(story: 4)
+            case 3:
+                sender.tag == 1
+                    ? updateStory(story: 6)
+                    : updateStory(story: 5)
+            default:
                 
-        // TODO Step 6: Modify the IF-Statement to complete the story
-        
-    
+                break
+            }
     }
     
-
-
-
+    func updateStory(story : Int = 1) {
+        let shouldHideTopBtn = allAnswers["\(story)a"] == nil
+        let shouldHideBottomBtn = allAnswers["\(story)b"] == nil
+        
+        storyNumber = story
+        storyTextView.text = allStories[story]
+        
+        topButton.setTitle(allAnswers["\(story)a"], for: .normal)
+        bottomButton.setTitle(allAnswers["\(story)b"], for: .normal)
+        
+        topButton.isHidden = shouldHideTopBtn
+        bottomButton.isHidden = shouldHideBottomBtn
+        
+        restartBtn.isHidden = !shouldHideTopBtn && !shouldHideBottomBtn
+    }
 }
 
